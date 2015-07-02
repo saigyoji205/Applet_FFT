@@ -29,13 +29,13 @@ public class SelectWindow extends JFrame implements ActionListener {
         bt1.addActionListener(this);
         bt2.addActionListener(this);
 
-        fc = new JFileChooser();
-
         setVisible(true);
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent e)
+    {
+        fc = new JFileChooser();
         // [Open File FileChooser]をクリックした場合
         if (e.getSource() == bt1) {
             // File open FileChooserを表示して、戻り値をresultに保存
@@ -53,6 +53,7 @@ public class SelectWindow extends JFrame implements ActionListener {
             else if (result == JFileChooser.CANCEL_OPTION) {
                 System.out.println("取消し");
             }
+
             // (ERROR_OPTION)FileChooserでエラーが発生した場合
             else if (result == JFileChooser.ERROR_OPTION) {
                 System.out.println("エラー発生");
@@ -116,7 +117,6 @@ public class SelectWindow extends JFrame implements ActionListener {
     }
 
     public static void main(String[] args) {
-        FileChooser fc1 = new FileChooser();
         SelectWindow window = new SelectWindow();
     }
 }
