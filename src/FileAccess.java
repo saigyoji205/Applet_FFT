@@ -6,7 +6,7 @@ import java.util.StringTokenizer;
 
 public class FileAccess {
 
-    File filePath;
+    private static File filePath;
 
     public void setFilePath(File filePath) {
         this.filePath = filePath;
