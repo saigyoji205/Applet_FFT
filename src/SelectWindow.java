@@ -1,34 +1,34 @@
-import javafx.stage.FileChooser;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+
 
 public class SelectWindow extends JFrame implements ActionListener {
     JButton bt1;
     JButton bt2;
+    JLabel label;
     JFileChooser fc;
     FileAccess fileAccess;
 
     public SelectWindow() {
-        setTitle("FFT");
-        setSize(600, 600);
+        setTitle("FFT for 9ch");
+        setSize(600, 300);
         Container ct = getContentPane();
         ct.setLayout(new FlowLayout());
         bt1 = new JButton("Open File FileChooser");
-        bt2 = new JButton("Save File FileChooser");
+        bt2 = new JButton("First Fourier Transform");
+        label = new JLabel("File Name");
 
         this.add(bt1);
         this.add(bt2);
+        this.add(label);
 
         bt1.addActionListener(this);
         bt2.addActionListener(this);
-
         setVisible(true);
     }
 
@@ -106,11 +106,7 @@ public class SelectWindow extends JFrame implements ActionListener {
         File filePath = fc.getSelectedFile();
         System.out.println("fileName= " + filePath);
 
-        try {
-            FileReader fr = new FileReader(filePath);
-            // 以下コード省略
-            fr.close();
-        } catch (IOException evt) {}
+        label.setText(filePath.getName());
 
         fileAccess.setFilePath(filePath);
         System.out.println(fileAccess.getRaw());
