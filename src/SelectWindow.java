@@ -109,7 +109,8 @@ public class SelectWindow extends JFrame implements ActionListener {
         label.setText(filePath.getName());
 
         fileAccess.setFilePath(filePath);
-        System.out.println(fileAccess.getRaw());
+
+        fileAccess.getRaw();
     }
 
     public static void main(String[] args) {
