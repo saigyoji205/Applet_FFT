@@ -19,7 +19,7 @@ public class FileAccess {
         BufferedReader br = new BufferedReader(fr);
 
         // 脳波の電位差を格納するリスト
-        ArrayList<ArrayList<Double>> list = new ArrayList<ArrayList<Double>>();
+        ArrayList<Double[]> list = new ArrayList<>();
 
         // 読み込んだファイルを１行ずつ処理
         String line;
@@ -42,10 +42,12 @@ public class FileAccess {
                 }
             }
             if (flag == 1) {
-                list.add(sub);
+                list.add(sub.toArray(new Double[0])); // 変更箇所
             }
             flag = 0;
         }
-        System.out.println(list);
+
+        Double[][] data = list.toArray(new Double[0][0]); // 変更箇所
+        System.out.println(data[0][0]);
     }
 }
