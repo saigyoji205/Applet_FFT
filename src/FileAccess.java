@@ -32,7 +32,7 @@ public class FileAccess {
         StringTokenizer token;
         Double brain_voltage; // 電位差
         Double windowFunc; //　窓関数
-        int i = 0;
+        int N = 0;
         int flag = 0; // 格納判定(1なら格納)
         while((line = br.readLine()) != null) {
             // 区切り文字","で分割する
@@ -43,7 +43,7 @@ public class FileAccess {
                 try {
                     // 分割した文字から数値データを抽出
                     brain_voltage = Double.parseDouble(token.nextToken());
-                    windowFunc = (0.5 - 0.5 * Math.cos((2*Math.PI*i)/512))*brain_voltage; //窓関数
+                    windowFunc = (0.5 - 0.5 * Math.cos((2*Math.PI*N)/512))*brain_voltage; //窓関数
                     sub.add(windowFunc);
                     flag = 1;
                 } catch (NumberFormatException ne) {
@@ -52,7 +52,7 @@ public class FileAccess {
             }
             if (flag == 1) {
                 list.add(sub.toArray(new Double[0])); // 変更箇所
-                i++;
+                N++;
             }
             flag = 0;
         }
@@ -62,19 +62,28 @@ public class FileAccess {
         double[] x = new double[512];
         FastFourierTransformer fft = new FastFourierTransformer(DftNormalization.STANDARD); //FFTインスタンス作成
 
-        for(i = 0; i < x.length; i++)
-        {
-            x[i] = data[i][0];
-            System.out.println(i+":"+x[i]);
-        }
-        System.out.println("******************");
-        try {
-            Complex[] y = fft.transform(x, TransformType.FORWARD);
-            for(i = 0; i < y.length; i++){
-                System.out.println(y[i].toString());
+        System.out.println(list.size());
+        System.out.println(data.length);
+        System.out.println(x.length);
+        for(int j = 0; j < list.size(); j+=512) {
+            for (int i = 0; i < x.length; i++) {
+                if(i+j >= list.size()){
+                    x[i] = 0.0;
+                }
+                else {
+                    x[i] = data[i + j][0];
+                }
+                System.out.println((i + j) + ":" + x[i]);
             }
-        }catch(MathIllegalArgumentException e){
-            e.printStackTrace();
+            System.out.println("******************");
+            try {
+                Complex[] y = fft.transform(x, TransformType.FORWARD);
+                for (int i = 0; i < y.length; i++) {
+                    System.out.println(y[i].toString());
+                }
+            } catch (MathIllegalArgumentException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
