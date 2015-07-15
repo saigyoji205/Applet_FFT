@@ -8,5 +8,8 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="JTransforms-3.0" level="application" />
+    <orderEntry type="library" name="JLargeArrays-1.2" level="application" />
+    <orderEntry type="library" name="commons-math3-3.5" level="application" />
+    <orderEntry type="library" name="commons-math3-3.5-javadoc" level="application" />
   </component>
 </module>
