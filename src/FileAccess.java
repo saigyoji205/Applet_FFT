@@ -4,16 +4,14 @@ import org.apache.commons.math3.transform.DftNormalization;
 import org.apache.commons.math3.transform.FastFourierTransformer;
 import org.apache.commons.math3.transform.TransformType;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
 public class FileAccess {
 
     private static File filePath;
+    private static final int channel = 9;
 
     public void setFilePath(File filePath) {
         FileAccess.filePath = filePath;
@@ -22,7 +20,9 @@ public class FileAccess {
     public void getRaw() throws IOException{
         // ファイルの読み込み
         FileReader fr = new FileReader(filePath);
+        FileWriter fw = new FileWriter("text.txt",false);
         BufferedReader br = new BufferedReader(fr);
+        PrintWriter pw = new PrintWriter(new BufferedWriter(fw));
 
         // 脳波の電位差を格納するリスト
         ArrayList<Double[]> list = new ArrayList<>();
@@ -62,28 +62,35 @@ public class FileAccess {
         double[] x = new double[512];
         FastFourierTransformer fft = new FastFourierTransformer(DftNormalization.STANDARD); //FFTインスタンス作成
 
+        /*
         System.out.println(list.size());
         System.out.println(data.length);
         System.out.println(x.length);
-        for(int j = 0; j < list.size(); j+=512) {
-            for (int i = 0; i < x.length; i++) {
-                if(i+j >= list.size()){
-                    x[i] = 0.0;
+        */
+        for(int i = 0; i < channel; i++){
+            for (int j = 0; j < list.size(); j += 512) {
+                for (int k = 0; k < x.length; k++) {
+                    if (j + k >= list.size()) {
+                        x[k] = 0.0;
+                    } else {
+                        x[k] = data[j + k][i];
+                    }
+                    //System.out.println((j+k)+ ":" + x[k]);
                 }
-                else {
-                    x[i] = data[i + j][0];
+                try {
+                    Complex[] y = fft.transform(x, TransformType.FORWARD);
+                    for (int k = 0; k < y.length; k++) {
+                        System.out.println(y[k].toString() + ":" + y[k].getReal() + ":" + y[k].getImaginary() + ":" + y[k].abs());
+                        pw.println(y[k].toString() + ":" + y[k].getReal() + ":" + y[k].getImaginary() + ":" + y[k].abs());
+                    }
+                } catch (MathIllegalArgumentException e) {
+                    e.printStackTrace();
                 }
-                System.out.println((i + j)+ ":" + x[i]);
             }
             System.out.println("******************");
-            try {
-                Complex[] y = fft.transform(x, TransformType.FORWARD);
-                for (int i = 0; i < y.length; i++) {
-                    System.out.println(y[i].toString()+":"+y[i].getReal()+":"+y[i].getImaginary()+":"+y[i].abs());
-                }
-            } catch (MathIllegalArgumentException e) {
-                e.printStackTrace();
-            }
+            pw.println("******************");
         }
+        System.out.println("出力が完了しました。");
+        pw.close();
     }
 }
