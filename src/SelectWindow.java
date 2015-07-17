@@ -44,7 +44,7 @@ public class SelectWindow extends JFrame implements ActionListener {
             // (APPROVE_OPTION)FileChooserの"開く"ボタンをクリックした場合
             if (result == JFileChooser.APPROVE_OPTION) {
                 try {
-                    getPath();
+                    setPath();
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
@@ -59,13 +59,19 @@ public class SelectWindow extends JFrame implements ActionListener {
                 System.out.println("エラー発生");
             }
         }
-        // [Save File FileChooserをクリックした場合
+        // [First Fourier Transform]をクリックした場合
         if (e.getSource() == bt2) {
+            try {
+                doFFT();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+            /*
             int result = fc.showSaveDialog(SelectWindow.this);
 
             // (APPROVE_OPTION)FileChooserの保存ボタンをクリックした場合
             if (result == JFileChooser.APPROVE_OPTION) {
-                savePath();
+                doFFT();
             }
 
             // (CANCEL_OPTION) FileChooser取消しボタンをクリックした場合
@@ -77,25 +83,22 @@ public class SelectWindow extends JFrame implements ActionListener {
             else if (result == JFileChooser.ERROR_OPTION) {
                 System.out.println("エラー発生");
             }
+            */
         }
     }
 
-    public void savePath() {
+    public void doFFT() throws IOException{
         System.out.println("保存ボタンがクリックされました");
-        try {
-            // FileChooserのテキストフィールドに入力されたファイル名のフルパスの取得
-            File filePath = fc.getSelectedFile();
-            System.out.println("fileName =" + filePath);
+        // FileChooserのテキストフィールドに入力されたファイル名のフルパスの取得
+        File filePath = fc.getSelectedFile();
+        fileAccess = new FileAccess();
 
-            // 保存先のフルパスの指定
-            FileWriter fw = new FileWriter(filePath);
+        System.out.println("fileName =" + filePath);
 
-            //以下コード省略
-            fw.close();
-        } catch (IOException evt) {}
+        fileAccess.getRaw();
     }
 
-    public void getPath() throws IOException {
+    public void setPath() throws IOException {
         // FileChooserが参照しているディレクトリ・パス名の取得
         File directoryName = fc.getCurrentDirectory();
         fileAccess = new FileAccess();
@@ -110,7 +113,6 @@ public class SelectWindow extends JFrame implements ActionListener {
 
         fileAccess.setFilePath(filePath);
 
-        fileAccess.getRaw();
     }
 
     public static void main(String[] args) {

@@ -73,13 +73,13 @@ public class FileAccess {
                 else {
                     x[i] = data[i + j][0];
                 }
-                System.out.println((i + j) + ":" + x[i]);
+                System.out.println((i + j)+ ":" + x[i]);
             }
             System.out.println("******************");
             try {
                 Complex[] y = fft.transform(x, TransformType.FORWARD);
                 for (int i = 0; i < y.length; i++) {
-                    System.out.println(y[i].toString());
+                    System.out.println(y[i].toString()+":"+y[i].getReal()+":"+y[i].getImaginary()+":"+y[i].abs());
                 }
             } catch (MathIllegalArgumentException e) {
                 e.printStackTrace();
